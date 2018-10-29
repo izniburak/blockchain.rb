@@ -5,8 +5,7 @@ require_relative './consts'
 module Blockchain
   class Chain
     def initialize
-      @chain = Array.new
-      @prepare_data = Array.new
+      @chain, @prepare_data = Array.new, Array.new
       @reward = REWARD
       boot
     end
@@ -15,16 +14,12 @@ module Blockchain
       @chain << Block.new(Time.now, Array.new)
     end
 
-    def last_chain
-      @chain.last
-    end
-
     def transaction(data)
       @prepare_data << data
     end
 
     def mine(miner)
-      block = Block.new(Time.now, @prepare_data, self.last_chain.hash)
+      block = Block.new(Time.now, @prepare_data, @chain.last.hash)
       block.mine 
 
       @chain.push block
@@ -35,8 +30,8 @@ module Blockchain
     end
 
     def validate
-      @chain.map_with_index do |data, i|
-        return false unless @data.validate @chain[i - 1]
+      @chain.map.with_index do |data, i|
+        return false unless @data.validate @chain[i-1]
       end
       true
     end

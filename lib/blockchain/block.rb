@@ -3,7 +3,7 @@ require_relative "./consts"
 
 module Blockchain
   class Block
-    def initialize(timestamp, transactions, prev_hash = "")
+    def initialize(timestamp, transactions, prev_hash = nil)
       @timestamp = timestamp
       @transactions = transactions
       @prev_hash = prev_hash
@@ -24,9 +24,9 @@ module Blockchain
     end
 
     def mine
-      until self.verify
-        @nonce = @nonce + 1
-        @hash = self.new_hash        
+      until verify
+        @nonce += 1
+        @hash = new_hash        
       end
     end
 
@@ -36,11 +36,15 @@ module Blockchain
     end
 
     def validate(prev)
-      @hash == self.new_hash && @prev_hash == prev.hash
+      @hash === new_hash && @prev_hash === prev.hash
     end
 
     def hash 
       @hash
+    end
+
+    def prev_hash
+      @prev_hash
     end
 
     def transactions

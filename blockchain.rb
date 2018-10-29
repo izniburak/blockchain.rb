@@ -13,4 +13,9 @@ blockchain.transaction(Blockchain::Transaction.new "java", "dotnet", 30)
 
 block = blockchain.mine "miner_address"
 
-puts blockchain.blocks
+blockchain.blocks.map.with_index do |block, i|
+  puts "##{i} Block Hash: #{block.hash}"
+  block.transactions.map do |t|
+    puts t.info
+  end
+end
